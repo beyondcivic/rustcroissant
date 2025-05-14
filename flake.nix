@@ -4,19 +4,36 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, fenix }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
+      
+      # Get the complete toolchain with specific components
+      rustToolchain = fenix.packages.${system}.complete.withComponents [
+        "cargo"
+        "clippy"
+        "rust-src"
+        "rustc"
+        "rustfmt"
+      ];
+      
+      # Get the latest rust-analyzer
+      rustAnalyzer = fenix.packages.${system}.rust-analyzer;
+      
     in {
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
-          rustc
-          cargo
-          rustfmt
-          clippy
-          rust-analyzer
+          # Use fenix rust toolchain instead of nixpkgs ones
+          rustToolchain
+          rustAnalyzer
+          
+          # Keep your other tools
           powershell
           jq
           gcc
