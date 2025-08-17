@@ -31,8 +31,8 @@ jobs:
         run: |
           # Extract the tag name
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          # Use the tag name as the build number
-          BUILD_NUMBER="$TAG_NAME"
+          # Remove the v from the version number
+          BUILD_NUMBER="${TAG_NAME#v}"
           echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
           echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
           echo "Using tag as build number: $BUILD_NUMBER"
