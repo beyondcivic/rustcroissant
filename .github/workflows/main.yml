@@ -54,6 +54,7 @@ jobs:
       - name: Build
         run: |
           # Update the version in Cargo.toml to match the git tag
+          echo "Setting Cargo.toml version to: ${{ env.BUILD_NUMBER }}"
           sed -i 's/^version = ".*"/version = "${{ env.BUILD_NUMBER }}"/' Cargo.toml
 
           # Build the release binary
