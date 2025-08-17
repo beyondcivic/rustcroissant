@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 chrono = "0.4"
 clap = { version = "4.4", features = ["derive"] }
+rand = "0.9.1"
 
 [build-dependencies]
 chrono = "0.4"
