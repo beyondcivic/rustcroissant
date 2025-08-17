@@ -30,12 +30,3 @@ pub fn get_version() -> Version {
         build_time: BUILD_TIME,
     }
 }
-
-/// Format version information as a string
-pub fn version_string() -> String {
-    let v = get_version();
-    format!(
-        "{} v{} (git: {}, built: {})",
-        v.app_name, v.version, v.git_hash, v.build_time
-    )
-}

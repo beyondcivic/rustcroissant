@@ -29,16 +29,15 @@ fn main() {
 
     // Create output file
     let out_dir = env::var("OUT_DIR").unwrap();
-    let dest_path = format!("{}/version_info.rs", out_dir);
+    let dest_path = format!("{out_dir}/version_info.rs");
 
     let content = format!(
         r#"
 pub static APP_NAME: &str = "rustcroissant";
-pub static VERSION: &str = "{}";
-pub static GIT_HASH: &str = "{}";
-pub static BUILD_TIME: &str = "{}";
-        "#,
-        version, git_hash, build_time
+pub static VERSION: &str = "{version}";
+pub static GIT_HASH: &str = "{git_hash}";
+pub static BUILD_TIME: &str = "{build_time}";
+        "#
     );
 
     fs::write(dest_path, content).unwrap();

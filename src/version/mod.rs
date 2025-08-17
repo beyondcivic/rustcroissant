@@ -1,5 +1,4 @@
-pub mod version;
+mod version_info;
 
-// Re-export the main Version type and any important functions
-pub use version::Version;
-pub use version::get_version;
+pub use version_info::Version;
+pub use version_info::get_version;
