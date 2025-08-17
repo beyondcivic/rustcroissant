@@ -4,13 +4,13 @@
 pub struct Version {
     /// Name of the application
     pub app_name: &'static str,
-    
+
     /// Service version
     pub version: &'static str,
-    
+
     /// Git hash of the commit the service is built from
     pub git_hash: &'static str,
-    
+
     /// Build time in RFC3339 format
     pub build_time: &'static str,
 }
