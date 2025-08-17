@@ -39,8 +39,7 @@
           powershell
           jq
           gcc
-          gnumake
-          serde
+          gnumake 
         ];
 
         nativeBuildInputs = [ pkgs.pkg-config ];
