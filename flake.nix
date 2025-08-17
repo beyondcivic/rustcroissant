@@ -35,12 +35,12 @@
           rustfmt
           clippy
           rust-analyzer
-          clap
           nixfmt
           powershell
           jq
           gcc
           gnumake
+          serde
         ];
 
         nativeBuildInputs = [ pkgs.pkg-config ];
