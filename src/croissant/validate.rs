@@ -390,10 +390,7 @@ fn validate_data_type(data_type: &str, issues: &mut ValidationIssues, context: &
 
     if !valid_types.contains(&data_type) {
         issues.add_warning_with_context(
-            format!(
-                "Unknown data type: {}. Consider using a standard schema.org type.",
-                data_type
-            ),
+            format!("Unknown data type: {data_type}. Consider using a standard schema.org type."),
             context,
         );
     }
@@ -417,10 +414,7 @@ fn validate_references(issues: &mut ValidationIssues, metadata: &Metadata) {
                     metadata.name, record_set.name, field.name
                 );
                 issues.add_error_with_context(
-                    format!(
-                        "Field references non-existent file object: {}",
-                        file_object_id
-                    ),
+                    format!("Field references non-existent file object: {file_object_id}"),
                     &context,
                 );
             }

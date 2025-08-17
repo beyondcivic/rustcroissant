@@ -29,7 +29,7 @@ pub fn generate_metadata_from_csv(csv_path: &Path, output_path: Option<&Path>) -
     // Create fields based on CSV columns
     let mut fields = Vec::new();
     for (i, header) in headers.iter().enumerate() {
-        let field_id = format!("main/{}", header);
+        let field_id = format!("main/{header}");
         let mut data_type = DataType::Text; // Default
 
         // Try to infer data type from first row if available
@@ -43,7 +43,7 @@ pub fn generate_metadata_from_csv(csv_path: &Path, output_path: Option<&Path>) -
             id: field_id,
             type_: "cr:Field".to_string(),
             name: header.clone(),
-            description: format!("Field for {}", header),
+            description: format!("Field for {header}"),
             data_type: data_type.to_schema_org().to_string(),
             source: FieldSource {
                 extract: Extract {
@@ -68,8 +68,8 @@ pub fn generate_metadata_from_csv(csv_path: &Path, output_path: Option<&Path>) -
     let metadata = Metadata {
         context: create_default_context(),
         type_: "sc:Dataset".to_string(),
-        name: format!("{}_dataset", dataset_name),
-        description: format!("Dataset created from {}", file_name),
+        name: format!("{dataset_name}_dataset"),
+        description: format!("Dataset created from {file_name}"),
         conforms_to: "http://mlcommons.org/croissant/1.0".to_string(),
         date_published: Utc::now().format("%Y-%m-%d").to_string(),
         version: "1.0.0".to_string(),
@@ -77,7 +77,7 @@ pub fn generate_metadata_from_csv(csv_path: &Path, output_path: Option<&Path>) -
             id: file_name.clone(),
             type_: "cr:FileObject".to_string(),
             name: file_name.clone(),
-            content_size: format!("{} B", file_size),
+            content_size: format!("{file_size} B"),
             content_url: file_name,
             encoding_format: "text/csv".to_string(),
             sha256: file_sha256,

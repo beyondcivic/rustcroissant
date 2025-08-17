@@ -30,6 +30,15 @@ fn main() {
                     .required(false)
                     .value_name("FILE")
                 )
+        )
+        .subcommand(
+            Command::new("validate")
+                .about("Validate a Croissant JSON-LD metadata file")
+                .arg(clap::Arg::new("input")
+                    .help("Input JSON-LD file to validate")
+                    .required(true)
+                    .index(1)
+                )
         );
 
     // Parse arguments and handle commands
@@ -49,7 +58,15 @@ fn main() {
                 .expect("Input CSV required");
             let output = sub_m.get_one::<String>("output");
             let input_path = std::path::Path::new(input);
-            let output_path = output.map(|o| std::path::Path::new(o));
+            let output_path = output.map(std::path::Path::new);
+
+            // Validate output path if provided
+            if let Some(out_path) = output_path {
+                if let Err(e) = rustcroissant::croissant::utils::validate_output_path(out_path) {
+                    eprintln!("Invalid output path: {e}");
+                    std::process::exit(1);
+                }
+            }
 
             match rustcroissant::croissant::generate::generate_metadata_from_csv(
                 input_path,
@@ -57,13 +74,35 @@ fn main() {
             ) {
                 Ok(_) => {
                     if let Some(o) = output {
-                        println!("Croissant metadata generated and saved to: {}", o);
+                        println!("Croissant metadata generated and saved to: {o}");
                     } else {
                         println!("Croissant metadata generated.");
                     }
                 }
                 Err(e) => {
-                    eprintln!("Error generating metadata: {}", e);
+                    eprintln!("Error generating metadata: {e}");
+                    std::process::exit(1);
+                }
+            }
+        }
+        Some(("validate", sub_m)) => {
+            let input = sub_m
+                .get_one::<String>("input")
+                .expect("Input JSON-LD file required");
+            let input_path = std::path::Path::new(input);
+            match rustcroissant::croissant::validate::validate_file(input_path) {
+                Ok(issues) => {
+                    if issues.is_empty() {
+                        println!("Validation passed with no issues.");
+                    } else {
+                        println!("{}", issues.report());
+                        if issues.has_errors() {
+                            std::process::exit(1);
+                        }
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Error validating metadata: {e}");
                     std::process::exit(1);
                 }
             }

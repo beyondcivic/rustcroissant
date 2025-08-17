@@ -1,5 +1,5 @@
 mod core;
 mod errors;
 pub mod generate;
-mod utils;
-mod validation;
+pub mod utils;
+pub mod validate;

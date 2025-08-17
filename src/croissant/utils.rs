@@ -58,7 +58,7 @@ pub fn validate_output_path(output_path: &Path) -> Result<()> {
     if let Some(parent) = output_path.parent() {
         if !parent.exists() {
             std::fs::create_dir_all(parent).map_err(|e| {
-                Error::invalid_output_path(output_path, format!("Cannot create directory: {}", e))
+                Error::invalid_output_path(output_path, format!("Cannot create directory: {e}"))
             })?;
         }
     }
@@ -73,7 +73,7 @@ pub fn validate_output_path(output_path: &Path) -> Result<()> {
         }
         Err(e) => Err(Error::invalid_output_path(
             output_path,
-            format!("Cannot write to path: {}", e),
+            format!("Cannot write to path: {e}"),
         )),
     }
 }
@@ -82,7 +82,7 @@ pub fn validate_output_path(output_path: &Path) -> Result<()> {
 pub fn normalize_path(path: &Path) -> Result<std::path::PathBuf> {
     path_clean::clean(path)
         .canonicalize()
-        .map_err(|e| Error::invalid_format(format!("Invalid path: {}", e)))
+        .map_err(|e| Error::invalid_format(format!("Invalid path: {e}")))
 }
 
 /// Get file size in a human-readable format
@@ -137,8 +137,7 @@ pub fn validate_csv_format(csv_path: &Path) -> Result<()> {
         }
         if !seen_headers.insert(trimmed.to_lowercase()) {
             return Err(Error::invalid_format(format!(
-                "CSV file has duplicate header: {}",
-                trimmed
+                "CSV file has duplicate header: {trimmed}"
             )));
         }
     }
