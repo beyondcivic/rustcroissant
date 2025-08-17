@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Rust development environment using Nix with naersk";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";

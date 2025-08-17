@@ -1,0 +1,88 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    env:
+      EXECUTABLE: rustcroissant
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          cache: true
+
+      - name: Set version from tag
+        id: build_number
+        run: |
+          # Extract the tag name
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          # Use the tag name as the build number
+          BUILD_NUMBER="$TAG_NAME"
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+          echo "Using tag as build number: $BUILD_NUMBER"
+
+      - name: Check Rust version
+        run: |
+          rustc --version
+          cargo --version
+
+      - name: Download dependencies
+        run: cargo fetch
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Build
+        run: |
+          # Update the version in Cargo.toml to match the git tag
+          sed -i 's/^version = ".*"/version = "${{ env.BUILD_NUMBER }}"/' Cargo.toml
+
+          # Build the release binary
+          cargo build --release --verbose
+
+          # Create bin directory
+          mkdir -p ./bin
+
+          # Copy the built binary from target/release
+          cp target/release/${{ env.EXECUTABLE }} ./bin/${{ env.EXECUTABLE }}
+
+          # Make sure it's executable
+          chmod +x ./bin/${{ env.EXECUTABLE }}
+
+          # Verify the binary works
+          ./bin/${{ env.EXECUTABLE }} version
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rustcroissant
+          path: ./bin
+
+      - name: Echo build number
+        run: echo "${{ env.BUILD_NUMBER }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./bin/${{ env.EXECUTABLE }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

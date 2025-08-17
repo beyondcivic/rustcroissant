@@ -21,3 +21,6 @@ target/
 /target
 ideal_structure.txt
 result
+
+fr.sh
+repo_structure.yaml
