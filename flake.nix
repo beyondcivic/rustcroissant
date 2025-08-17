@@ -7,17 +7,23 @@
   };
 
   outputs =
-    { self, nixpkgs }:
+    {
+      self,
+      nixpkgs,
+      naersk,
+    }:
     let
       pkgs = nixpkgs.legacyPackages."x86_64-linux";
-      naerskLib = pkgs.callPackage naersk {};
-    in {
+      naerskLib = pkgs.callPackage naersk { };
+    in
+    {
 
+      #  packages."x86_64-linux".default = pkgs.callPackage ./default.nix {}; # TRADITIONAL WAY
       packages."x86_64-linux".default = naerskLib.buildPackage {
-       
+
         src = ./.;
-        buildInputs = [pkgs.clap];
-        nativeBuildInputs = [pkgs.pkg-config];
+        buildInputs = [ pkgs.clap ];
+        nativeBuildInputs = [ pkgs.pkg-config ];
 
       };
 
@@ -30,6 +36,11 @@
           clippy
           rust-analyzer
           clap
+          nixfmt
+          powershell
+          jq
+          gcc
+          gnumake
         ];
 
         nativeBuildInputs = [ pkgs.pkg-config ];
