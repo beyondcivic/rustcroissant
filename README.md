@@ -2,6 +2,10 @@
 
 A Rust implementation for working with the [ML Commons Croissant](https://github.com/mlcommons/croissant) metadata format—a standardized way to describe machine learning datasets using JSON-LD.
 
+[![Version](https://img.shields.io/badge/version-v0.1.1-blue)](https://github.com/beyondcivic/rustcroissant/releases/tag/v0.1.2)
+[![Rust Version](https://img.shields.io/badge/Rust-1.88+-CE422B?logo=rust)](https://forge.rust-lang.org/channel-releases.html)
+[![License](https://img.shields.io/badge/license-TBD-red)](LICENSE)
+
 ## Overview
 
 Croissant is an open metadata standard designed to improve dataset documentation, searchability, and usage in machine learning workflows. This library simplifies the creation of Croissant-compatible metadata from CSV data sources by:
@@ -45,7 +49,7 @@ nix build
 
 The resulting binary will be in the `result/bin/` directory.
 
-✨ VERY IMPORTANT NOTE: The `nix build` command replaces the previous `cargo build` command, as it now uses Nix to manage dependencies and build the project.
+✨ GOOD TO KNOW: The `nix build` command can be used instead of `cargo build` command, as it now uses Nix to manage dependencies and build the project.
 
 ### Running the Application
 
@@ -58,10 +62,10 @@ nix run
 Or, specify arguments:
 
 ```bash
-nix run . -- data.csv -o output.json
+nix run . -- generate data.csv -o metadata.jsonld
 ```
 
-✨VERY IMPORTANT NOTE: The `nix run` command replaces the previous `cargo run` command, as it now uses Nix to manage dependencies and run the project.
+✨GOOD TO KNOW: The `nix run` command can be used instead of `cargo run` command, as it now uses Nix to manage dependencies and run the project.
 
 ## Usage
 
@@ -69,10 +73,10 @@ nix run . -- data.csv -o output.json
 
 ```bash
 # Generate metadata with default output path
-nix run . -- data.csv
+nix run . -- generate data.csv
 
 # Specify output path
-nix run . -- data.csv -o output.json
+nix run . -- generate data.csv -o metadata.jsonld
 ```
 
 ### Using the Library in Your Rust Code
@@ -152,7 +156,7 @@ exit status 1
 
 ### Adding New Data Types
 
-To add support for new data types, modify the `infer_data_type` function in `src/croissant.rs`:
+To add support for new data types, modify the `infer_data_type` function in `src/croissant/core.rs`:
 
 ```rust
 fn infer_data_type(value: &str) -> &'static str {
