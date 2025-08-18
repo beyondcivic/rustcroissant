@@ -2,7 +2,7 @@
 
 A Rust implementation for working with the [ML Commons Croissant](https://github.com/mlcommons/croissant) metadata format—a standardized way to describe machine learning datasets using JSON-LD.
 
-[![Version](https://img.shields.io/badge/version-v0.1.1-blue)](https://github.com/beyondcivic/rustcroissant/releases/tag/v0.1.2)
+[![Version](https://img.shields.io/badge/version-v0.1.2-blue)](https://github.com/beyondcivic/rustcroissant/releases/tag/v0.1.2)
 [![Rust Version](https://img.shields.io/badge/Rust-1.88+-CE422B?logo=rust)](https://forge.rust-lang.org/channel-releases.html)
 [![License](https://img.shields.io/badge/license-TBD-red)](LICENSE)
 
